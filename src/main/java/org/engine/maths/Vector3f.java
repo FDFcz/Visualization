@@ -14,6 +14,13 @@ public class Vector3f {
         this.y = y;
         this.z = z;
     }
+    public void add(Vector3f v) {add(v.x,v.y,v.z);}
+    public void add(float x, float y, float z)
+    {
+        this.x += x;
+        this.y += y;
+        this.z += z;
+    }
 
     public float getX() {
         return x;

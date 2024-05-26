@@ -16,16 +16,28 @@ public class Main implements Runnable {
     public Renderer renderer;
     public Shader shader;
 
-    public Mesh mesh = new Mesh(new Vertex[] {
-            new Vertex(new Vector3f(-0.5f,  0.5f, 0.0f),new Vector3f(1f,0,0), new Vector2f(0,0)),
-            new Vertex(new Vector3f(-0.5f, -0.5f, 0.0f),new Vector3f(0f,1.0f,0),new Vector2f(0,1)),
-            new Vertex(new Vector3f( 0.5f, -0.5f, 0.0f),new Vector3f(1.0f,0,0),new Vector2f(1,1)),
-            new Vertex(new Vector3f( 0.5f,  0.5f, 0.0f),new Vector3f(0f,1.0f,0),new Vector2f(1,0))
+    public final Vector3f colorWhite = new Vector3f(1.0f, 1.0f, 1.0f);
+    public final Vector3f colorGreen = new Vector3f(0f, 1.0f, 0f);
+    public Mesh carMesh = new Mesh(new Vertex[] {
+            new Vertex(new Vector3f(-0.062f,  0.05f, 0.0f),colorWhite, new Vector2f(0,0)),
+            new Vertex(new Vector3f(-0.062f, -0.05f, 0.0f),colorWhite,new Vector2f(0,1)),
+            new Vertex(new Vector3f( 0.062f, -0.05f, 0.0f),colorWhite,new Vector2f(1,1)),
+            new Vertex(new Vector3f( 0.062f,  0.05f, 0.0f),colorWhite,new Vector2f(1,0))
     }, new int[] {
             0, 1, 2,
             0, 3, 2
     },new Material("/textures/car.png"));
-    public SceneObject object = new SceneObject(new Vector3f(0, 0, 0), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1), mesh);
+    public Mesh metalicMesh = new Mesh(new Vertex[] {
+            new Vertex(new Vector3f(-0.072f,  0.06f, 0.0f),colorGreen, new Vector2f(0,0)),
+            new Vertex(new Vector3f(-0.072f, -0.06f, 0.0f),colorGreen,new Vector2f(0,1)),
+            new Vertex(new Vector3f( 0.072f, -0.06f, 0.0f),colorGreen,new Vector2f(1,1)),
+            new Vertex(new Vector3f( 0.072f,  0.06f, 0.0f),colorGreen,new Vector2f(1,0))
+    }, new int[] {
+            0, 1, 2,
+            0, 3, 2
+    },new Material("/textures/metalic.jpg"));
+    public SceneObject object = new SceneObject(new Vector3f(0, 0, 0), new Vector3f(0, 0f, 0), new Vector3f(1, 1, 1), carMesh);
+    public SceneObject object2 = new SceneObject(new Vector3f(0f, 0, 0), new Vector3f(0, 0f, 0), new Vector3f(1, 1, 1), metalicMesh);
     public Camera camera = new Camera(new Vector3f(0,0,1),new Vector3f(0,0,0));
 
 
@@ -49,7 +61,8 @@ public class Main implements Runnable {
         window.setBgColor(0.1f,0.1f,0.1f);
         window.create();
         //window.setFullscreen(true);
-        mesh.create();
+        carMesh.create();
+        metalicMesh.create();
         shader.create();
     }
 
@@ -67,12 +80,14 @@ public class Main implements Runnable {
     private void render()
     {
         renderer.renderMesh(object,camera);
+        renderer.renderMesh(object2,camera);
         window.swapBuffers();
     }
     private void close()
     {
         window.destroy();
-        mesh.destroy();
+        carMesh.destroy();
+        metalicMesh.destroy();
         shader.destroy();
     }
 

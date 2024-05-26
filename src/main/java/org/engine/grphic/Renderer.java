@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL30;
 
 public class Renderer {
     private Shader shader;
-    private double temp;
+   // private double temp;
     private Window window;
 
     public Renderer(Window window, Shader shader)
@@ -20,7 +20,6 @@ public class Renderer {
     }
 
     public void renderMesh(SceneObject object, Camera camera) {
-        temp = 1;
         GL30.glBindVertexArray(object.getMesh().getVAO());
         GL30.glEnableVertexAttribArray(0);
         GL30.glEnableVertexAttribArray(1);

@@ -8,5 +8,7 @@ out vec4 outColor;
 uniform sampler2D tex;
 
 void main() {
-	outColor = texture(tex, passTextureCoord);
+	  vec4 textureColor = texture(tex, passTextureCoord);
+	  vec4 color = vec4(passColor, 1.0); // Convert passColor to a vec4 with alpha set to 1.0
+      outColor = textureColor * color;
 }

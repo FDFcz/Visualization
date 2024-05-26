@@ -1,5 +1,6 @@
 package org.engine.io;
 
+import org.engine.maths.Matrix4f;
 import org.engine.maths.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -18,6 +19,7 @@ public class Window {
     private GLFWWindowSizeCallback sizeCallback;
     private boolean isResize,isFullscreen;
     private int[] windowPosX = new int[1], windowPosY = new int[1];
+    private Matrix4f projection;
 
     public void setBgColor(float r, float g, float b) {background.set(r,g,b);}
     public void setWidth(int width) {this.width = width;}
@@ -40,6 +42,7 @@ public class Window {
     public int getHeight() {return height;}
     public String getTitle() {return title;}
     public long getWindow() {return window;}
+    public Matrix4f getProjectionMatrix() {return projection;}
     public boolean isFullscreen() {return isFullscreen;}
 
     public Window(int width, int height, String title)
@@ -47,6 +50,7 @@ public class Window {
         this.width = width;
         this.height = height;
         this.title = title;
+        this.projection = Matrix4f.projection(70f,(float) width/height,0.1f,100f);
     }
     public void create()
     {

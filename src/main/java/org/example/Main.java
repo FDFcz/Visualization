@@ -5,6 +5,8 @@ import org.engine.io.Input;
 import org.engine.io.Window;
 import org.engine.maths.Vector2f;
 import org.engine.maths.Vector3f;
+import org.engine.objects.Camera;
+import org.engine.objects.SceneObject;
 import org.lwjgl.glfw.GLFW;
 
 public class Main implements Runnable {
@@ -23,6 +25,9 @@ public class Main implements Runnable {
             0, 1, 2,
             0, 3, 2
     },new Material("/textures/car.png"));
+    public SceneObject object = new SceneObject(new Vector3f(0, 0, 0), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1), mesh);
+    public Camera camera = new Camera(new Vector3f(0,0,1),new Vector3f(0,0,0));
+
 
     public static void main(String[] args) {
         new Main().stertThreds();
@@ -40,7 +45,7 @@ public class Main implements Runnable {
     public void init() {
         window = new Window(WIDTH,HEIGHT,"Visualization");
         shader = new Shader("/shaders/mainVertex.glsl", "/shaders/mainFragment.glsl");
-        renderer = new Renderer(shader);
+        renderer = new Renderer(window,shader);
         window.setBgColor(0.1f,0.1f,0.1f);
         window.create();
         //window.setFullscreen(true);
@@ -61,7 +66,7 @@ public class Main implements Runnable {
     }
     private void render()
     {
-        renderer.renderMesh(mesh);
+        renderer.renderMesh(object,camera);
         window.swapBuffers();
     }
     private void close()

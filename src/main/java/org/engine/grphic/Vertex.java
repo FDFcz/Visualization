@@ -11,6 +11,8 @@ public class Vertex {
     public Vector3f getColor() {return color;}
     public Vector2f getTextureCoord() {return textureCoord;}
 
+    public void setColor(Vector3f color) {this.color = color;}
+
     public Vertex(Vector3f position,Vector3f color,Vector2f textureCoord) {
         this.position = position;
         this.color = color;

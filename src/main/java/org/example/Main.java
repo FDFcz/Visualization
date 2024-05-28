@@ -6,8 +6,9 @@ import org.engine.io.Window;
 import org.engine.maths.Vector2f;
 import org.engine.maths.Vector3f;
 import org.engine.objects.Camera;
-import org.engine.objects.SceneObject;
+import org.engine.objects.SceneObjectUI;
 import org.lwjgl.glfw.GLFW;
+import org.simulation.objects.SceneObject;
 
 public class Main implements Runnable {
     public Thread visu;
@@ -18,26 +19,26 @@ public class Main implements Runnable {
 
     public final Vector3f colorWhite = new Vector3f(1.0f, 1.0f, 1.0f);
     public final Vector3f colorGreen = new Vector3f(0f, 1.0f, 0f);
-    public Mesh carMesh = new Mesh(new Vertex[] {
-            new Vertex(new Vector3f(-0.062f,  0.05f, 0.0f),colorWhite, new Vector2f(0,0)),
-            new Vertex(new Vector3f(-0.062f, -0.05f, 0.0f),colorWhite,new Vector2f(0,1)),
-            new Vertex(new Vector3f( 0.062f, -0.05f, 0.0f),colorWhite,new Vector2f(1,1)),
-            new Vertex(new Vector3f( 0.062f,  0.05f, 0.0f),colorWhite,new Vector2f(1,0))
+    private Mesh carMesh = new Mesh(new Vertex[] {
+            new Vertex(new Vector3f(-0.062f,  0.05f, 0.0f), SceneObject.StatusColors.white, new Vector2f(0,0)),
+            new Vertex(new Vector3f(-0.062f, -0.05f, 0.0f), SceneObject.StatusColors.white,new Vector2f(0,0.8f)),
+            new Vertex(new Vector3f( 0.062f, -0.05f, 0.0f), SceneObject.StatusColors.white,new Vector2f(0.8f,0.8f)),
+            new Vertex(new Vector3f( 0.062f,  0.05f, 0.0f), SceneObject.StatusColors.white,new Vector2f(0.8f,0))
     }, new int[] {
             0, 1, 2,
             0, 3, 2
     },new Material("/textures/car.png"));
-    public Mesh metalicMesh = new Mesh(new Vertex[] {
-            new Vertex(new Vector3f(-0.072f,  0.06f, 0.0f),colorGreen, new Vector2f(0,0)),
-            new Vertex(new Vector3f(-0.072f, -0.06f, 0.0f),colorGreen,new Vector2f(0,1)),
-            new Vertex(new Vector3f( 0.072f, -0.06f, 0.0f),colorGreen,new Vector2f(1,1)),
-            new Vertex(new Vector3f( 0.072f,  0.06f, 0.0f),colorGreen,new Vector2f(1,0))
+    private Mesh metalicMesh = new Mesh(new Vertex[] {
+            new Vertex(new Vector3f(-0.072f,  0.06f, 0.0f), SceneObject.StatusColors.green, new Vector2f(0.4f,0.4f)),
+            new Vertex(new Vector3f(-0.072f, -0.06f, 0.0f), SceneObject.StatusColors.green,new Vector2f(0.4f,0.6f)),
+            new Vertex(new Vector3f( 0.072f, -0.06f, 0.0f), SceneObject.StatusColors.green,new Vector2f(0.6f,0.6f)),
+            new Vertex(new Vector3f( 0.072f,  0.06f, 0.0f), SceneObject.StatusColors.green,new Vector2f(0.6f,0.4f))
     }, new int[] {
             0, 1, 2,
             0, 3, 2
     },new Material("/textures/metalic.jpg"));
-    public SceneObject object = new SceneObject(new Vector3f(0, 0, 0), new Vector3f(0, 0f, 0), new Vector3f(1, 1, 1), carMesh);
-    public SceneObject object2 = new SceneObject(new Vector3f(0f, 0, 0), new Vector3f(0, 0f, 0), new Vector3f(1, 1, 1), metalicMesh);
+    public SceneObjectUI object = new SceneObjectUI(new Vector3f(0, 0, 0), new Vector3f(0, 0f, 0), new Vector3f(1, 1, 1), carMesh);
+    public SceneObjectUI object2 = new SceneObjectUI(new Vector3f(0f, 0, 0), new Vector3f(0, 0f, 0), new Vector3f(1, 1, 1), metalicMesh);
     public Camera camera = new Camera(new Vector3f(0,0,1),new Vector3f(0,0,0));
 
 
@@ -57,7 +58,7 @@ public class Main implements Runnable {
     public void init() {
         window = new Window(WIDTH,HEIGHT,"Visualization");
         shader = new Shader("/shaders/mainVertex.glsl", "/shaders/mainFragment.glsl");
-        renderer = new Renderer(window,shader);
+        renderer = new Renderer(window,shader,camera);
         window.setBgColor(0.1f,0.1f,0.1f);
         window.create();
         //window.setFullscreen(true);
@@ -79,8 +80,8 @@ public class Main implements Runnable {
     }
     private void render()
     {
-        renderer.renderMesh(object,camera);
-        renderer.renderMesh(object2,camera);
+        renderer.renderMesh(object);
+        renderer.renderMesh(object2);
         window.swapBuffers();
     }
     private void close()

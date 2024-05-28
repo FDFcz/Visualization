@@ -2,6 +2,7 @@ package org.engine.grphic;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
+import org.engine.maths.Vector3f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
@@ -73,6 +74,13 @@ public class Mesh {
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, ibo);
         GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL15.GL_STATIC_DRAW);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
+    }
+
+    public void setColor(Vector3f color)
+    {
+        for(int i = 0; i < vertices.length; i++) {
+            vertices[i].setColor(color);
+        }
     }
 
     private int storeData(FloatBuffer buffer, int index, int size) {

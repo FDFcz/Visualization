@@ -2,7 +2,7 @@ package org.engine.grphic;
 import org.engine.io.Window;
 import org.engine.maths.Matrix4f;
 import org.engine.objects.Camera;
-import org.engine.objects.SceneObject;
+import org.engine.objects.SceneObjectUI;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL15;
@@ -10,16 +10,17 @@ import org.lwjgl.opengl.GL30;
 
 public class Renderer {
     private Shader shader;
-   // private double temp;
+    private Camera camera;
     private Window window;
 
-    public Renderer(Window window, Shader shader)
+    public Renderer(Window window, Shader shader,Camera camera)
     {
         this.shader = shader;
         this.window = window;
+        this.camera = camera;
     }
 
-    public void renderMesh(SceneObject object, Camera camera) {
+    public void renderMesh(SceneObjectUI object) {
         GL30.glBindVertexArray(object.getMesh().getVAO());
         GL30.glEnableVertexAttribArray(0);
         GL30.glEnableVertexAttribArray(1);

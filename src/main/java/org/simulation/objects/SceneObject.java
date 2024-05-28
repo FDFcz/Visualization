@@ -20,15 +20,7 @@ public abstract class SceneObject {
         public static Vector3f white = new Vector3f(1,1,1);
     }
 
-    private Mesh metalicMesh = new Mesh(new Vertex[] {
-            new Vertex(new Vector3f(-0.072f,  0.06f, 0.0f),StatusColors.green, new Vector2f(0.4f,0.4f)),
-            new Vertex(new Vector3f(-0.072f, -0.06f, 0.0f),StatusColors.green,new Vector2f(0.4f,0.6f)),
-            new Vertex(new Vector3f( 0.072f, -0.06f, 0.0f),StatusColors.green,new Vector2f(0.6f,0.6f)),
-            new Vertex(new Vector3f( 0.072f,  0.06f, 0.0f),StatusColors.green,new Vector2f(0.6f,0.4f))
-    }, new int[] {
-            0, 1, 2,
-            0, 3, 2
-    },new Material("/textures/metalic.jpg"));
+    private Mesh metalicMesh;
 
     public static void intRenderer(Renderer rnd)
     {
@@ -36,11 +28,18 @@ public abstract class SceneObject {
     }
 
     public SceneObject(Vector3f position, Vector3f rotation, Vector3f scale) {
-        coloredUIObject = new SceneObjectUI(position,rotation,scale,metalicMesh);
+        metalicMesh = new Mesh(new Vertex[] {
+                new Vertex(new Vector3f(-0.072f,  0.06f, 0.0f),StatusColors.green, new Vector2f(0.4f,0.4f)),
+                new Vertex(new Vector3f(-0.072f, -0.06f, 0.0f),StatusColors.green,new Vector2f(0.4f,0.6f)),
+                new Vertex(new Vector3f( 0.072f, -0.06f, 0.0f),StatusColors.green,new Vector2f(0.6f,0.6f)),
+                new Vertex(new Vector3f( 0.072f,  0.06f, 0.0f),StatusColors.green,new Vector2f(0.6f,0.4f))
+        }, new int[] {
+                0, 1, 2,
+                0, 3, 2
+        },new Material("/textures/metalic.jpg"));
         metalicMesh.create();
+        coloredUIObject = new SceneObjectUI(position,rotation,scale,metalicMesh);
     }
-
-
     public void updateStatus(StatusColor c){
         switch (c){
             case READY:

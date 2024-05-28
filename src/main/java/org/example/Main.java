@@ -16,6 +16,7 @@ public class Main implements Runnable {
     public final int WIDTH = 1280, HEIGHT = 760;
     public Renderer renderer;
     public Shader shader;
+    private SimulationScene scene;
 
     public final Vector3f colorWhite = new Vector3f(1.0f, 1.0f, 1.0f);
     public final Vector3f colorGreen = new Vector3f(0f, 1.0f, 0f);
@@ -62,6 +63,8 @@ public class Main implements Runnable {
         window.setBgColor(0.1f,0.1f,0.1f);
         window.create();
         //window.setFullscreen(true);
+        scene = new SimulationScene();
+        SceneObject.intRenderer(renderer);
         carMesh.create();
         metalicMesh.create();
         shader.create();
@@ -80,8 +83,9 @@ public class Main implements Runnable {
     }
     private void render()
     {
-        renderer.renderMesh(object);
-        renderer.renderMesh(object2);
+        //renderer.renderMesh(object);
+        //renderer.renderMesh(object2);
+        scene.renderObject();
         window.swapBuffers();
     }
     private void close()

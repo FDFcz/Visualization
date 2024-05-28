@@ -11,6 +11,8 @@ import org.engine.objects.SceneObjectUI;
 public abstract class SceneObject {
     protected SceneObjectUI coloredUIObject;
     protected static Renderer renderer;
+
+
     public enum StatusColor{READY,FAULT,WAITING,MAINTENANCE};
     public record StatusColors() {
         public static Vector3f red = new Vector3f(1,0,0);
@@ -20,13 +22,14 @@ public abstract class SceneObject {
         public static Vector3f white = new Vector3f(1,1,1);
     }
 
-    private Mesh metalicMesh;
+    protected Mesh metalicMesh;
 
     public static void intRenderer(Renderer rnd)
     {
         renderer = rnd;
     }
 
+    protected SceneObject() {}
     public SceneObject(Vector3f position, Vector3f rotation, Vector3f scale) {
         metalicMesh = new Mesh(new Vertex[] {
                 new Vertex(new Vector3f(-0.072f,  0.06f, 0.0f),StatusColors.green, new Vector2f(0.4f,0.4f)),

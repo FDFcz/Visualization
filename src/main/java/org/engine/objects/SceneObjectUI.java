@@ -36,6 +36,8 @@ public class SceneObjectUI {
 
     public void setStatusColor(Vector3f color)
     {
+        mesh.destroy();
         mesh.setColor(color);
+        mesh.create();
     }
 }

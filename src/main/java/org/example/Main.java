@@ -17,29 +17,6 @@ public class Main implements Runnable {
     public Renderer renderer;
     public Shader shader;
     private SimulationScene scene;
-
-    public final Vector3f colorWhite = new Vector3f(1.0f, 1.0f, 1.0f);
-    public final Vector3f colorGreen = new Vector3f(0f, 1.0f, 0f);
-    private Mesh carMesh = new Mesh(new Vertex[] {
-            new Vertex(new Vector3f(-0.062f,  0.05f, 0.0f), SceneObject.StatusColors.white, new Vector2f(0,0)),
-            new Vertex(new Vector3f(-0.062f, -0.05f, 0.0f), SceneObject.StatusColors.white,new Vector2f(0,0.8f)),
-            new Vertex(new Vector3f( 0.062f, -0.05f, 0.0f), SceneObject.StatusColors.white,new Vector2f(0.8f,0.8f)),
-            new Vertex(new Vector3f( 0.062f,  0.05f, 0.0f), SceneObject.StatusColors.white,new Vector2f(0.8f,0))
-    }, new int[] {
-            0, 1, 2,
-            0, 3, 2
-    },new Material("/textures/car.png"));
-    private Mesh metalicMesh = new Mesh(new Vertex[] {
-            new Vertex(new Vector3f(-0.072f,  0.06f, 0.0f), SceneObject.StatusColors.green, new Vector2f(0.4f,0.4f)),
-            new Vertex(new Vector3f(-0.072f, -0.06f, 0.0f), SceneObject.StatusColors.green,new Vector2f(0.4f,0.6f)),
-            new Vertex(new Vector3f( 0.072f, -0.06f, 0.0f), SceneObject.StatusColors.green,new Vector2f(0.6f,0.6f)),
-            new Vertex(new Vector3f( 0.072f,  0.06f, 0.0f), SceneObject.StatusColors.green,new Vector2f(0.6f,0.4f))
-    }, new int[] {
-            0, 1, 2,
-            0, 3, 2
-    },new Material("/textures/metalic.jpg"));
-    public SceneObjectUI object = new SceneObjectUI(new Vector3f(0, 0, 0), new Vector3f(0, 0f, 0), new Vector3f(1, 1, 1), carMesh);
-    public SceneObjectUI object2 = new SceneObjectUI(new Vector3f(0f, 0, 0), new Vector3f(0, 0f, 0), new Vector3f(1, 1, 1), metalicMesh);
     public Camera camera = new Camera(new Vector3f(0,0,1),new Vector3f(0,0,0));
 
 
@@ -65,8 +42,6 @@ public class Main implements Runnable {
         //window.setFullscreen(true);
         scene = new SimulationScene();
         SceneObject.intRenderer(renderer);
-        carMesh.create();
-        metalicMesh.create();
         shader.create();
     }
 
@@ -83,17 +58,14 @@ public class Main implements Runnable {
     }
     private void render()
     {
-        //renderer.renderMesh(object);
-        //renderer.renderMesh(object2);
         scene.renderObject();
         window.swapBuffers();
     }
     private void close()
     {
         window.destroy();
-        carMesh.destroy();
-        metalicMesh.destroy();
         shader.destroy();
+        scene.destroy();
     }
 
 }

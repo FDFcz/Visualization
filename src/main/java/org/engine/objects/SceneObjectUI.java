@@ -20,6 +20,7 @@ public class SceneObjectUI {
     public Mesh getMesh() {
         return mesh;
     }
+    public void setRotation(Vector3f rotation) {this.rotation = rotation;}
 
     public SceneObjectUI(Vector3f position, Vector3f rotation, Vector3f scale, Mesh mesh) {
         this.position = position;

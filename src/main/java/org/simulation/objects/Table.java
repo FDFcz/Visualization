@@ -8,8 +8,7 @@ import org.engine.maths.Vector3f;
 import org.engine.objects.SceneObjectUI;
 
 public class Table extends SceneObject{
-    //Renderer renderer;
-    private boolean isOccupied;
+    private boolean isOccupied = true;
     public SceneObjectUI carObject;
     Mesh carMesh;
 
@@ -31,7 +30,7 @@ public class Table extends SceneObject{
     }
     @Override
     public void renderSelf() {
-        renderer.renderMesh(carObject);
+        if(isOccupied)renderer.renderMesh(carObject);
         renderer.renderMesh(coloredUIObject);
     }
     public void destroy()

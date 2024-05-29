@@ -7,10 +7,24 @@ import org.engine.maths.Vector2f;
 import org.engine.maths.Vector3f;
 import org.engine.objects.SceneObjectUI;
 
-public class Table extends SceneObject{
+public class Table extends TactebleObject{
+    //protected Robot[] robots;
     private boolean isOccupied = true;
     public SceneObjectUI carObject;
     Mesh carMesh;
+    protected Table nextTable;
+
+    public void setNextTable(Table nextTable) {this.nextTable = nextTable;}
+
+    @Override
+    protected boolean isTiming() {
+        return isOccupied;
+    }
+
+    @Override
+    protected boolean isDone() {
+        return false;
+    }
 
     public Table(Vector3f position, Vector3f rotation, Vector3f scale)
     {
@@ -30,12 +44,18 @@ public class Table extends SceneObject{
     }
     @Override
     public void renderSelf() {
-        if(isOccupied)renderer.renderMesh(carObject);
+        if(isOccupied)
+        {
+            renderer.renderMesh(carObject);
+            checkTime();
+        }
         renderer.renderMesh(coloredUIObject);
+
     }
     public void destroy()
     {
         super.destroy();
         carMesh.destroy();
     }
+
 }

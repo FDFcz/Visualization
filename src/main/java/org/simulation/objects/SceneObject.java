@@ -12,16 +12,17 @@ public abstract class SceneObject {
     protected SceneObjectUI coloredUIObject;
     protected static Renderer renderer;
 
-    public enum StatusColor{READY,WORKING,FAULT,WAITING,MAINTENANCE};
+    public enum StatusColor{READY,WORKING,FAULT,WAITING,MAINTENANCE,DELAYED};
     public record StatusColors() {
         public static Vector3f green = new Vector3f(0,1,0);
-        public static Vector3f LightGreen = new Vector3f(0.5f,1,0.5f);
+        public static Vector3f lightGreen = new Vector3f(0.5f,1,0.5f);
         public static Vector3f red = new Vector3f(1,0,0);
         public static Vector3f blue = new Vector3f(0,0,1);
         public static Vector3f yellow = new Vector3f(1,1,0);
         public static Vector3f white = new Vector3f(1,1,1);
+        public static Vector3f cyan = new Vector3f(0,1,1);
     }
-    protected StatusColor status = StatusColor.READY;
+    protected StatusColor status = StatusColor.WORKING;
 
     protected Mesh metalicMesh;
 
@@ -49,16 +50,23 @@ public abstract class SceneObject {
             case READY:
                 coloredUIObject.setStatusColor(StatusColors.green);
                 break;
+            case WORKING:
+                coloredUIObject.setStatusColor(StatusColors.lightGreen);
+                break;
             case FAULT:
                 coloredUIObject.setStatusColor(StatusColors.red);
                 break;
             case WAITING:
-                coloredUIObject.setStatusColor(StatusColors.blue);
+                coloredUIObject.setStatusColor(StatusColors.cyan);
                 break;
             case MAINTENANCE:
                 coloredUIObject.setStatusColor(StatusColors.yellow);
                 break;
+            case DELAYED:
+                coloredUIObject.setStatusColor(StatusColors.blue);
+                break;
         }
+        status = c;
     }
     public abstract void renderSelf();
 

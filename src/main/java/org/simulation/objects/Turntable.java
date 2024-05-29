@@ -11,11 +11,16 @@ public class Turntable extends Table{
     @Override
     public void renderSelf() {
         super.renderSelf();
+        swapRotation();
     }
     private void swapRotation()
     {
-        Vector3f temp = new Vector3f(secondRotation.getX(), secondRotation.getY(), secondRotation.getZ());
+        Vector3f tempRot = new Vector3f(secondRotation.getX(), secondRotation.getY(), secondRotation.getZ());
         secondRotation = coloredUIObject.getRotation();
-        coloredUIObject.setRotation(temp);
+        Vector3f tempPoss = coloredUIObject.getPosition();
+        coloredUIObject.setPosition(new Vector3f(0,0,0)); //todo
+        coloredUIObject.setRotation(tempRot);
+        coloredUIObject.setPosition(tempPoss);
+
     }
 }

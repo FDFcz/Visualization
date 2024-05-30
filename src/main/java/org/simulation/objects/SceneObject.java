@@ -41,10 +41,10 @@ public abstract class SceneObject {
     public void updateStatus(StatusColor c){
         switch (c){
             case READY:
-                coloredUIObject.setStatusColor(StatusColors.lightGreen);
+                coloredUIObject.setStatusColor(StatusColors.green);
                 break;
             case WORKING,PREPARING,FINISHING:
-                coloredUIObject.setStatusColor(StatusColors.green);
+                coloredUIObject.setStatusColor(StatusColors.lightGreen);
                 break;
             case FAULT:
                 coloredUIObject.setStatusColor(StatusColors.red);

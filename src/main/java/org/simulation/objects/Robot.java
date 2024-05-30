@@ -11,12 +11,12 @@ public class Robot extends SceneObject {
 
     public Robot(Vector3f position, Vector3f rotation, Vector3f scale) {
         metalicMesh = new Mesh(new Vertex[] {
-                new Vertex(new Vector3f(0.0f,  0.02f, 0.0f),StatusColors.green, new Vector2f(0.4f,0.4f)),
-                new Vertex(new Vector3f(-0.02f, 0.0f, 0.0f),StatusColors.green,new Vector2f(0.4f,0.6f)),
-                new Vertex(new Vector3f( 0.0f, -0.02f, 0.0f),StatusColors.green,new Vector2f(0.6f,0.6f)),
-                new Vertex(new Vector3f( 0.02f,  0.0f, 0.0f),StatusColors.green,new Vector2f(0.6f,0.4f)),
-                new Vertex(new Vector3f( 0.03f, 0.025f, 0.0f),StatusColors.green,new Vector2f(0.6f,0.6f)),
-                new Vertex(new Vector3f( 0.06f,  0.0f, 0.0f),StatusColors.green,new Vector2f(0.6f,0.4f))
+                new Vertex(new Vector3f(0.0f,  0.02f, 0.0f),StatusColors.purple, new Vector2f(0.4f,0.4f)),
+                new Vertex(new Vector3f(-0.02f, 0.0f, 0.0f),StatusColors.purple,new Vector2f(0.4f,0.6f)),
+                new Vertex(new Vector3f( 0.0f, -0.02f, 0.0f),StatusColors.purple,new Vector2f(0.6f,0.6f)),
+                new Vertex(new Vector3f( 0.02f,  0.0f, 0.0f),StatusColors.purple,new Vector2f(0.6f,0.4f)),
+                new Vertex(new Vector3f( 0.03f, 0.025f, 0.0f),StatusColors.purple,new Vector2f(0.6f,0.6f)),
+                new Vertex(new Vector3f( 0.06f,  0.0f, 0.0f),StatusColors.purple,new Vector2f(0.6f,0.4f))
         }, new int[] {
                 0, 1, 2,
                 0, 3, 2,
@@ -27,7 +27,7 @@ public class Robot extends SceneObject {
         coloredUIObject = new SceneObjectUI(position,rotation,scale,metalicMesh);
     }
     @Override
-    public void renderSelf() {
+    public void upadate() {
         renderer.renderMesh(coloredUIObject);
     }
 }

@@ -7,32 +7,44 @@ import org.engine.maths.Vector2f;
 import org.engine.maths.Vector3f;
 import org.engine.objects.SceneObjectUI;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Conveyor extends SceneObject{
 
     Table[] tables;
+
+    public Table getFirstTable() {
+        return tables[0];
+    }
+    public Table getLastTable() {
+        return tables[tables.length - 1];
+    }
+    public Conveyor(Vector3f position, Vector3f rotation, Vector3f scale,int carCount,Table nextTable)
+    {
+        this(position,rotation,scale,carCount);
+        tables[tables.length-1].setNextTable(nextTable);
+    }
     public Conveyor(Vector3f position, Vector3f rotation, Vector3f scale,int carCount) {
         super(position, rotation, scale);
         tables = new Table[carCount];
         Vector3f tempPosstion = new Vector3f(position.getX(),position.getY(),position.getZ());
-        for(int i = 0; i < carCount; i++)
+        tables[0] = new Table(tempPosstion,rotation,scale);
+        for(int i = 1; i < carCount; i++)
         {
-            tables[i] = new Table(tempPosstion,rotation,scale);
             tempPosstion = new Vector3f(position.getX(),tempPosstion.getY()-0.15f,position.getZ());
+            tables[i] = new Table(tempPosstion,rotation,scale);
+            tables[i-1].setNextTable(tables[i]);
         }
+        tables[tables.length-1].setOccupied(false);
 
         metalicMesh = new Mesh(new Vertex[] {
-                new Vertex(new Vector3f(-0.05f,  0.09f, 0.0f),StatusColors.green, new Vector2f(0.4f,0.4f)),
-                new Vertex(new Vector3f(-0.04f,  0.09f, 0.0f),StatusColors.green, new Vector2f(0.4f,0.4f)),
-                new Vertex(new Vector3f(-0.05f,  -0.09f-(carCount-1)*0.15f, 0.0f),StatusColors.green, new Vector2f(0.4f,0.4f)),
-                new Vertex(new Vector3f(-0.04f,  -0.09f-(carCount-1)*0.15f, 0.0f),StatusColors.green, new Vector2f(0.4f,0.4f)),
+                new Vertex(new Vector3f(-0.05f,  0.09f, 0.0f),StatusColors.purple, new Vector2f(0.4f,0.4f)),
+                new Vertex(new Vector3f(-0.04f,  0.09f, 0.0f),StatusColors.purple, new Vector2f(0.4f,0.4f)),
+                new Vertex(new Vector3f(-0.05f,  -0.09f-(carCount-1)*0.15f, 0.0f),StatusColors.purple, new Vector2f(0.4f,0.4f)),
+                new Vertex(new Vector3f(-0.04f,  -0.09f-(carCount-1)*0.15f, 0.0f),StatusColors.purple, new Vector2f(0.4f,0.4f)),
 
-                new Vertex(new Vector3f(0.05f,  0.09f, 0.0f),StatusColors.green, new Vector2f(0.4f,0.4f)),
-                new Vertex(new Vector3f(0.04f,  0.09f, 0.0f),StatusColors.green, new Vector2f(0.4f,0.4f)),
-                new Vertex(new Vector3f(0.05f,  -0.09f-(carCount-1)*0.15f, 0.0f),StatusColors.green, new Vector2f(0.4f,0.4f)),
-                new Vertex(new Vector3f(0.04f,  -0.09f-(carCount-1)*0.15f, 0.0f),StatusColors.green, new Vector2f(0.4f,0.4f))
+                new Vertex(new Vector3f(0.05f,  0.09f, 0.0f),StatusColors.purple, new Vector2f(0.4f,0.4f)),
+                new Vertex(new Vector3f(0.04f,  0.09f, 0.0f),StatusColors.purple, new Vector2f(0.4f,0.4f)),
+                new Vertex(new Vector3f(0.05f,  -0.09f-(carCount-1)*0.15f, 0.0f),StatusColors.purple, new Vector2f(0.4f,0.4f)),
+                new Vertex(new Vector3f(0.04f,  -0.09f-(carCount-1)*0.15f, 0.0f),StatusColors.purple, new Vector2f(0.4f,0.4f))
         }, new int[] {
                 0, 1, 2,
                 1, 2, 3,
@@ -46,11 +58,17 @@ public class Conveyor extends SceneObject{
     }
 
     @Override
-    public void renderSelf() {
+    public void upadate() {
         for (Table table : tables)
         {
-            table.renderSelf();
+            table.upadate();
         }
         renderer.renderMesh(coloredUIObject);
+    }
+
+    @Override
+    public void destroy() {
+        for (Table table : tables) table.destroy();
+        super.destroy();
     }
 }

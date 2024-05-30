@@ -7,14 +7,28 @@ import org.engine.maths.Vector2f;
 import org.engine.maths.Vector3f;
 import org.engine.objects.SceneObjectUI;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Table extends TactebleObject{
     //protected Robot[] robots;
     private boolean isOccupied = true;
     public SceneObjectUI carObject;
     Mesh carMesh;
-    protected Table nextTable;
+    protected Table previousTable;
+    protected List<Table> nextTable = new ArrayList<Table>();
 
-    public void setNextTable(Table nextTable) {this.nextTable = nextTable;}
+    public void setNextTable(Table nextTable) {this.nextTable.add(nextTable);}
+    public void setOccupied(boolean isOccupied)
+    {
+        if(isOccupied)
+        {
+            resetTimer();
+            updateStatus(StatusColor.WORKING);
+        }
+        else updateStatus(StatusColor.READY);
+        this.isOccupied = isOccupied;
+    }
 
     @Override
     protected boolean isTiming() {
@@ -23,7 +37,12 @@ public class Table extends TactebleObject{
 
     @Override
     protected boolean isDone() {
-        return false;
+        return (isOccupied&&(status==StatusColor.WAITING||status==StatusColor.READY));
+    }
+    public Table(Vector3f position, Vector3f rotation, Vector3f scale,Table nextTable)
+    {
+        this(position,rotation,scale);
+        this.nextTable.add(nextTable);
     }
 
     public Table(Vector3f position, Vector3f rotation, Vector3f scale)
@@ -41,21 +60,41 @@ public class Table extends TactebleObject{
         },new Material("/textures/car.png"));
         carMesh.create();
         carObject = new SceneObjectUI(position,rotation,scale,carMesh);
+        updateStatus(StatusColor.WORKING);
+    }
+
+    public boolean TryToMoveOn(Table previos)
+    {
+        if(isOccupied || previousTable != null) return false;
+        setOccupied(true);
+        //previousTable = previos;
+        return true;
     }
     @Override
-    public void renderSelf() {
+    public void upadate() {
         if(isOccupied)
         {
             renderer.renderMesh(carObject);
-            checkTime();
+            updateTime();
         }
         renderer.renderMesh(coloredUIObject);
 
+        if(isDone())
+        {
+            for (Table nextTable : nextTable) {
+                if (nextTable.TryToMoveOn(this)) {
+                    isOccupied = false;
+                    //updateStatus(StatusColor.READY);
+                    resetTimer();
+                    break;
+                }
+            }
+            //if(status!=StatusColor.READY)updateStatus(StatusColor.WAITING);
+        }
     }
     public void destroy()
     {
         super.destroy();
         carMesh.destroy();
     }
-
 }

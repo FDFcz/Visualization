@@ -12,7 +12,7 @@ public abstract class SceneObject {
     protected SceneObjectUI coloredUIObject;
     protected static Renderer renderer;
 
-    public enum StatusColor{READY,WORKING,FAULT,WAITING,MAINTENANCE,DELAYED};
+    public enum StatusColor{READY,WORKING,FAULT,WAITING,MAINTENANCE,DELAYED,OFFLINE};
     public record StatusColors() {
         public static Vector3f green = new Vector3f(0,1,0);
         public static Vector3f lightGreen = new Vector3f(0.5f,1,0.5f);
@@ -21,8 +21,9 @@ public abstract class SceneObject {
         public static Vector3f yellow = new Vector3f(1,1,0);
         public static Vector3f white = new Vector3f(1,1,1);
         public static Vector3f cyan = new Vector3f(0,1,1);
+        public static Vector3f purple = new Vector3f(1,0,1);
     }
-    protected StatusColor status = StatusColor.WORKING;
+    protected StatusColor status = StatusColor.OFFLINE;
 
     protected Mesh metalicMesh;
 
@@ -34,10 +35,10 @@ public abstract class SceneObject {
     protected SceneObject() {}
     public SceneObject(Vector3f position, Vector3f rotation, Vector3f scale) {
         metalicMesh = new Mesh(new Vertex[] {
-                new Vertex(new Vector3f(-0.072f,  0.06f, 0.0f),StatusColors.green, new Vector2f(0.4f,0.4f)),
-                new Vertex(new Vector3f(-0.072f, -0.06f, 0.0f),StatusColors.green,new Vector2f(0.4f,0.6f)),
-                new Vertex(new Vector3f( 0.072f, -0.06f, 0.0f),StatusColors.green,new Vector2f(0.6f,0.6f)),
-                new Vertex(new Vector3f( 0.072f,  0.06f, 0.0f),StatusColors.green,new Vector2f(0.6f,0.4f))
+                new Vertex(new Vector3f(-0.072f,  0.06f, 0.0f),StatusColors.purple, new Vector2f(0.4f,0.4f)),
+                new Vertex(new Vector3f(-0.072f, -0.06f, 0.0f),StatusColors.purple,new Vector2f(0.4f,0.6f)),
+                new Vertex(new Vector3f( 0.072f, -0.06f, 0.0f),StatusColors.purple,new Vector2f(0.6f,0.6f)),
+                new Vertex(new Vector3f( 0.072f,  0.06f, 0.0f),StatusColors.purple,new Vector2f(0.6f,0.4f))
         }, new int[] {
                 0, 1, 2,
                 0, 3, 2
@@ -65,10 +66,13 @@ public abstract class SceneObject {
             case DELAYED:
                 coloredUIObject.setStatusColor(StatusColors.blue);
                 break;
+            case OFFLINE:
+                coloredUIObject.setStatusColor(StatusColors.purple);
+                break;
         }
         status = c;
     }
-    public abstract void renderSelf();
+    public abstract void upadate();
 
     public void destroy()
     {

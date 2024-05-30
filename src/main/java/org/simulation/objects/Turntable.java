@@ -9,8 +9,8 @@ public class Turntable extends Table{
     }
 
     @Override
-    public void renderSelf() {
-        super.renderSelf();
+    public void upadate() {
+        super.upadate();
         swapRotation();
     }
     private void swapRotation()

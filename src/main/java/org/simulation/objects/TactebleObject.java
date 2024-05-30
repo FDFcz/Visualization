@@ -1,17 +1,15 @@
 package org.simulation.objects;
 
 import org.engine.maths.Vector3f;
-
-import java.sql.Time;
 import java.util.Random;
 
 public abstract class TactebleObject extends SceneObject{
-    protected long tactTime = 10000;
-    protected long comonDoneTime = 8000;
+    protected long tactTime = 20000;
+    protected long comonDoneTime = 12000;
     protected long actualTacTime=0;
     protected long lastTime = System.currentTimeMillis();
-    protected float faultPersent =0.2f;
-    protected float deleyedPersent= 0.2f;
+    protected float faultPersent =0.05f;
+    protected float deleyedPersent= 0.05f;
     private Random rnd=new Random(System.nanoTime());
     private boolean faultChecked,deleyedChecked;
 
@@ -20,18 +18,26 @@ public abstract class TactebleObject extends SceneObject{
 
     public TactebleObject(Vector3f position, Vector3f rotation, Vector3f scale) {
         super(position, rotation, scale);
-        //actualTacTime=tactTime;
     }
 
-    protected void checkTime()
+    protected void resetTimer()
     {
-        long actualTime = System.currentTimeMillis();
-        if (status==StatusColor.WORKING)
+        updateStatus(StatusColor.READY);
+        lastTime = System.currentTimeMillis();
+        actualTacTime=0;
+        faultChecked=false;
+        deleyedChecked=false;
+    }
+
+    protected void updateTime()
+    {
+        long currentTimeMill = System.currentTimeMillis();
+        if (status==StatusColor.WORKING||status==StatusColor.DELAYED)
         {
-            long deltaTime = actualTime - lastTime;
+            long deltaTime = currentTimeMill - lastTime;
             actualTacTime+=deltaTime;
             //System.out.println(actualTacTime>=comonDoneTime);
-            if(actualTacTime%50==0&&!faultChecked)
+            if(actualTacTime%70==0&&!faultChecked)
             {
                 float res = rnd.nextFloat();
                 if(res<faultPersent) updateStatus(StatusColor.FAULT);
@@ -40,15 +46,49 @@ public abstract class TactebleObject extends SceneObject{
             if(actualTacTime>=comonDoneTime&&!deleyedChecked)
             {
                 float res = rnd.nextFloat();
-                if(res>deleyedPersent) updateStatus(StatusColor.READY);
+                if(res>deleyedPersent)
+                {
+                    updateStatus(StatusColor.READY);
+                    actualTacTime = 3000;
+                }
                 deleyedChecked=true;
             }
             if(actualTacTime>=tactTime)
             {
-                updateStatus(StatusColor.DELAYED);
-
+                if(isDone()) updateStatus(StatusColor.DELAYED);
+                deleyedChecked=false;
+                actualTacTime-=6000;
             }
         }
-        lastTime = actualTime;
+        else if(status==StatusColor.FAULT)
+        {
+            long deltaTime = currentTimeMill - lastTime;
+            actualTacTime-=deltaTime;
+            if(actualTacTime<0)
+            {
+                updateStatus(StatusColor.MAINTENANCE);
+                actualTacTime = rnd.nextInt(6000,12000);
+            }
+        }
+        else if(status==StatusColor.MAINTENANCE)
+        {
+            long deltaTime = currentTimeMill - lastTime;
+            actualTacTime-=deltaTime;
+            if(actualTacTime<0)
+            {
+                updateStatus(StatusColor.WORKING);
+                actualTacTime = rnd.nextInt(3000,7000);
+            }
+        }
+        else if(status==StatusColor.READY)
+        {
+            long deltaTime = currentTimeMill - lastTime;
+            actualTacTime-=deltaTime;
+            if(actualTacTime<0)
+            {
+                updateStatus(StatusColor.WAITING);
+            }
+        }
+        lastTime = currentTimeMill;
     }
 }

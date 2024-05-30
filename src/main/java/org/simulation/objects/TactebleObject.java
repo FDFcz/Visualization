@@ -8,8 +8,8 @@ public abstract class TactebleObject extends SceneObject{
     protected long comonDoneTime = 18000;
     protected long actualTacTime=0;
     protected long lastSystemTime = System.currentTimeMillis();
-    protected float faultPersent =0.1f;
-    protected float deleyedPersent= 0.05f;
+    protected float faultPersent =0.05f;
+    protected float deleyedPersent= 0.08f;
     private Random rnd=new Random(System.nanoTime());
     private boolean faultChecked,deleyedChecked;
 
@@ -41,7 +41,11 @@ public abstract class TactebleObject extends SceneObject{
             if(actualTacTime%70==0&&!faultChecked)
             {
                 float res = rnd.nextFloat();
-                if(res<faultPersent) updateStatus(StatusColor.FAULT);
+                if(res<faultPersent)
+                {
+                    updateStatus(StatusColor.FAULT);
+                    actualTacTime+=2000;
+                }
                 faultChecked=true;
             }
             if(actualTacTime>=comonDoneTime&&!deleyedChecked)

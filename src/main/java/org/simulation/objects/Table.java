@@ -18,6 +18,11 @@ public class Table extends TactebleObject{
     protected Table previousTable;
     protected List<Table> nextTable = new ArrayList<Table>();
 
+    protected long travelTime=3000;
+    protected long actualTravelTime=0;
+    //protected long lastSystemTime;
+
+
     public void setCanBeMoved(boolean canBeMoved) {this.canBeMoved = canBeMoved;}
     public void setNextTable(Table nextTable) {this.nextTable.add(nextTable);}
     public void setOccupied(boolean isOccupied)
@@ -78,29 +83,39 @@ public class Table extends TactebleObject{
     public boolean TryToMoveOn(Table previos)
     {
         if(isOccupied || previousTable != null) return false;
-        setOccupied(true);
-        //previousTable = previos;
+        actualTravelTime = travelTime;
+        previousTable = previos;
+        updateStatus(StatusColor.PREPARING);
         return true;
     }
     @Override
     public void upadate() {
+        if(previousTable!=null)
+        {
+            long deltatime= System.currentTimeMillis()-lastSystemTime;
+            actualTravelTime=travelTime-deltatime;
+            if(actualTravelTime<=0)
+            {
+                setOccupied(true);
+                previousTable.setOccupied(false);
+                previousTable = null;
+            }
+        }
+        else if(canBeMoved && isDone())
+        {
+            for (Table nextTable : nextTable) {
+                if (nextTable.TryToMoveOn(this)) {
+                    updateStatus(StatusColor.FINISHING);
+                    break;
+                }
+            }
+        }
         if(isOccupied)
         {
             renderer.renderMesh(carObject);
             updateTime();
         }
         renderer.renderMesh(coloredUIObject);
-
-        if(canBeMoved && isDone())
-        {
-            for (Table nextTable : nextTable) {
-                if (nextTable.TryToMoveOn(this)) {
-                    isOccupied = false;
-                    resetTimer();
-                    break;
-                }
-            }
-        }
     }
     public void destroy()
     {

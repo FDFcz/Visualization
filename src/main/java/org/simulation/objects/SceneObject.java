@@ -12,7 +12,7 @@ public abstract class SceneObject {
     protected SceneObjectUI coloredUIObject;
     protected static Renderer renderer;
 
-    public enum StatusColor{READY,WORKING,FAULT,WAITING,MAINTENANCE,DELAYED,OFFLINE};
+    public enum StatusColor{PREPARING,READY,WORKING,FINISHING,FAULT,WAITING,MAINTENANCE,DELAYED,OFFLINE};
     public record StatusColors() {
         public static Vector3f green = new Vector3f(0,1,0);
         public static Vector3f lightGreen = new Vector3f(0.5f,1,0.5f);
@@ -24,6 +24,8 @@ public abstract class SceneObject {
         public static Vector3f purple = new Vector3f(1,0,1);
     }
     protected StatusColor status = StatusColor.OFFLINE;
+    public boolean hasStatus(StatusColor statusColor) {return status == statusColor;}
+
 
     protected Mesh metalicMesh;
 
@@ -39,10 +41,10 @@ public abstract class SceneObject {
     public void updateStatus(StatusColor c){
         switch (c){
             case READY:
-                coloredUIObject.setStatusColor(StatusColors.green);
-                break;
-            case WORKING:
                 coloredUIObject.setStatusColor(StatusColors.lightGreen);
+                break;
+            case WORKING,PREPARING,FINISHING:
+                coloredUIObject.setStatusColor(StatusColors.green);
                 break;
             case FAULT:
                 coloredUIObject.setStatusColor(StatusColors.red);

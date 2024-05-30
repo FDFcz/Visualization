@@ -7,8 +7,8 @@ public abstract class TactebleObject extends SceneObject{
     protected long tactTime = 20000;
     protected long comonDoneTime = 18000;
     protected long actualTacTime=0;
-    protected long lastTime = System.currentTimeMillis();
-    protected float faultPersent =0.05f;
+    protected long lastSystemTime = System.currentTimeMillis();
+    protected float faultPersent =0.1f;
     protected float deleyedPersent= 0.05f;
     private Random rnd=new Random(System.nanoTime());
     private boolean faultChecked,deleyedChecked;
@@ -22,8 +22,9 @@ public abstract class TactebleObject extends SceneObject{
 
     protected void resetTimer()
     {
-        updateStatus(StatusColor.READY);
-        lastTime = System.currentTimeMillis();
+        //updateStatus(StatusColor.READY);
+        updateStatus(StatusColor.WORKING);
+        lastSystemTime = System.currentTimeMillis();
         actualTacTime=0;
         faultChecked=false;
         deleyedChecked=false;
@@ -34,7 +35,7 @@ public abstract class TactebleObject extends SceneObject{
         long currentTimeMill = System.currentTimeMillis();
         if (status==StatusColor.WORKING||status==StatusColor.DELAYED)
         {
-            long deltaTime = currentTimeMill - lastTime;
+            long deltaTime = currentTimeMill - lastSystemTime;
             actualTacTime+=deltaTime;
             //System.out.println(actualTacTime>=comonDoneTime);
             if(actualTacTime%70==0&&!faultChecked)
@@ -62,7 +63,7 @@ public abstract class TactebleObject extends SceneObject{
         }
         else if(status==StatusColor.FAULT)
         {
-            long deltaTime = currentTimeMill - lastTime;
+            long deltaTime = currentTimeMill - lastSystemTime;
             actualTacTime-=deltaTime;
             if(actualTacTime<0)
             {
@@ -72,7 +73,7 @@ public abstract class TactebleObject extends SceneObject{
         }
         else if(status==StatusColor.MAINTENANCE)
         {
-            long deltaTime = currentTimeMill - lastTime;
+            long deltaTime = currentTimeMill - lastSystemTime;
             actualTacTime-=deltaTime;
             if(actualTacTime<0)
             {
@@ -82,13 +83,13 @@ public abstract class TactebleObject extends SceneObject{
         }
         else if(status==StatusColor.READY)
         {
-            long deltaTime = currentTimeMill - lastTime;
+            long deltaTime = currentTimeMill - lastSystemTime;
             actualTacTime-=deltaTime;
             if(actualTacTime<0)
             {
                 updateStatus(StatusColor.WAITING);
             }
         }
-        lastTime = currentTimeMill;
+        lastSystemTime = currentTimeMill;
     }
 }

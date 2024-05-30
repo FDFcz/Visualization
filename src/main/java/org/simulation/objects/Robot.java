@@ -16,7 +16,7 @@ public class Robot extends TactebleObject {
 
     @Override
     protected boolean isDone() {
-        return false;
+        return hasStatus(StatusColor.READY);
     }
 
     public Robot(Vector3f position, Vector3f rotation, Vector3f scale) {
@@ -36,10 +36,13 @@ public class Robot extends TactebleObject {
         },new Material("/textures/metalic.jpg"));
         metalicMesh.create();
         coloredUIObject = new SceneObjectUI(position,rotation,scale,metalicMesh);
-        updateStatus(StatusColor.READY);
+        updateStatus(StatusColor.WORKING);
+        comonDoneTime+=3000;
+        tactTime+=3000;
     }
     @Override
     public void upadate() {
+        if(status!=StatusColor.READY) updateTime();
         renderer.renderMesh(coloredUIObject);
     }
 }

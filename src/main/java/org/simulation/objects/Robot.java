@@ -7,9 +7,20 @@ import org.engine.maths.Vector2f;
 import org.engine.maths.Vector3f;
 import org.engine.objects.SceneObjectUI;
 
-public class Robot extends SceneObject {
+public class Robot extends TactebleObject {
+
+    @Override
+    protected boolean isTiming() {
+        return false;
+    }
+
+    @Override
+    protected boolean isDone() {
+        return false;
+    }
 
     public Robot(Vector3f position, Vector3f rotation, Vector3f scale) {
+        super(position, rotation, scale);
         metalicMesh = new Mesh(new Vertex[] {
                 new Vertex(new Vector3f(0.0f,  0.02f, 0.0f),StatusColors.purple, new Vector2f(0.4f,0.4f)),
                 new Vertex(new Vector3f(-0.02f, 0.0f, 0.0f),StatusColors.purple,new Vector2f(0.4f,0.6f)),
@@ -25,6 +36,7 @@ public class Robot extends SceneObject {
         },new Material("/textures/metalic.jpg"));
         metalicMesh.create();
         coloredUIObject = new SceneObjectUI(position,rotation,scale,metalicMesh);
+        updateStatus(StatusColor.READY);
     }
     @Override
     public void upadate() {

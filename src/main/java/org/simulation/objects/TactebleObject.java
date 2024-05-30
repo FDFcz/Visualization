@@ -5,7 +5,7 @@ import java.util.Random;
 
 public abstract class TactebleObject extends SceneObject{
     protected long tactTime = 20000;
-    protected long comonDoneTime = 12000;
+    protected long comonDoneTime = 18000;
     protected long actualTacTime=0;
     protected long lastTime = System.currentTimeMillis();
     protected float faultPersent =0.05f;
@@ -55,7 +55,7 @@ public abstract class TactebleObject extends SceneObject{
             }
             if(actualTacTime>=tactTime)
             {
-                if(isDone()) updateStatus(StatusColor.DELAYED);
+                if(!isDone()) updateStatus(StatusColor.DELAYED);
                 deleyedChecked=false;
                 actualTacTime-=6000;
             }

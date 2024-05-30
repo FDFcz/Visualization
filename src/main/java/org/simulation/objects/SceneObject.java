@@ -34,17 +34,7 @@ public abstract class SceneObject {
 
     protected SceneObject() {}
     public SceneObject(Vector3f position, Vector3f rotation, Vector3f scale) {
-        metalicMesh = new Mesh(new Vertex[] {
-                new Vertex(new Vector3f(-0.072f,  0.06f, 0.0f),StatusColors.purple, new Vector2f(0.4f,0.4f)),
-                new Vertex(new Vector3f(-0.072f, -0.06f, 0.0f),StatusColors.purple,new Vector2f(0.4f,0.6f)),
-                new Vertex(new Vector3f( 0.072f, -0.06f, 0.0f),StatusColors.purple,new Vector2f(0.6f,0.6f)),
-                new Vertex(new Vector3f( 0.072f,  0.06f, 0.0f),StatusColors.purple,new Vector2f(0.6f,0.4f))
-        }, new int[] {
-                0, 1, 2,
-                0, 3, 2
-        },new Material("/textures/metalic.jpg"));
-        metalicMesh.create();
-        coloredUIObject = new SceneObjectUI(position,rotation,scale,metalicMesh);
+
     }
     public void updateStatus(StatusColor c){
         switch (c){

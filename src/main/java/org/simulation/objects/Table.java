@@ -11,13 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Table extends TactebleObject{
-    //protected Robot[] robots;
     private boolean isOccupied = true;
+    protected boolean canBeMoved = true;
     public SceneObjectUI carObject;
     Mesh carMesh;
     protected Table previousTable;
     protected List<Table> nextTable = new ArrayList<Table>();
 
+    public void setCanBeMoved(boolean canBeMoved) {this.canBeMoved = canBeMoved;}
     public void setNextTable(Table nextTable) {this.nextTable.add(nextTable);}
     public void setOccupied(boolean isOccupied)
     {
@@ -48,6 +49,17 @@ public class Table extends TactebleObject{
     public Table(Vector3f position, Vector3f rotation, Vector3f scale)
     {
         super(position,rotation,scale);
+        metalicMesh = new Mesh(new Vertex[] {
+                new Vertex(new Vector3f(-0.072f,  0.06f, 0.0f),StatusColors.purple, new Vector2f(0.4f,0.4f)),
+                new Vertex(new Vector3f(-0.072f, -0.06f, 0.0f),StatusColors.purple,new Vector2f(0.4f,0.6f)),
+                new Vertex(new Vector3f( 0.072f, -0.06f, 0.0f),StatusColors.purple,new Vector2f(0.6f,0.6f)),
+                new Vertex(new Vector3f( 0.072f,  0.06f, 0.0f),StatusColors.purple,new Vector2f(0.6f,0.4f))
+        }, new int[] {
+                0, 1, 2,
+                0, 3, 2
+        },new Material("/textures/metalic.jpg"));
+        metalicMesh.create();
+        coloredUIObject = new SceneObjectUI(position,rotation,scale,metalicMesh);
 
         carMesh = new Mesh(new Vertex[] {
                 new Vertex(new Vector3f(-0.062f,  0.05f, 0.0f),StatusColors.white, new Vector2f(0,0)),
@@ -79,17 +91,15 @@ public class Table extends TactebleObject{
         }
         renderer.renderMesh(coloredUIObject);
 
-        if(isDone())
+        if(canBeMoved && isDone())
         {
             for (Table nextTable : nextTable) {
                 if (nextTable.TryToMoveOn(this)) {
                     isOccupied = false;
-                    //updateStatus(StatusColor.READY);
                     resetTimer();
                     break;
                 }
             }
-            //if(status!=StatusColor.READY)updateStatus(StatusColor.WAITING);
         }
     }
     public void destroy()

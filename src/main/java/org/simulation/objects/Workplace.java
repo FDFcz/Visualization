@@ -29,11 +29,17 @@ public class Workplace extends TactebleObject{
         super(position, rotation, scale);
         table = new Table(position, rotation, scale);
         table.setCanBeMoved(false);
+        table.updateTimes(20000,28000);
         fence = new Fence(position, rotation, scale);
         robots[0] = new Robot(new Vector3f(position.getX()-0.06f,position.getY()+0.1f,position.getZ()), rotation, scale);
+        robots[0].updateTimes(18000,20000);
         robots[1] = new Robot(new Vector3f(position.getX()+0.025f,position.getY()+0.1f,position.getZ()), rotation, scale);
+        robots[1].updateTimes(18000,20000);
         robots[2] = new Robot(new Vector3f(position.getX()+0.025f,position.getY()-0.1f,position.getZ()), rotation, scale);
+        robots[2].updateTimes(18000,20000);
         robots[3] = new Robot(new Vector3f(position.getX()-0.06f,position.getY()-0.1f,position.getZ()), rotation, scale);
+        robots[3].updateTimes(18000,20000);
+        if(table.isTiming()) for (Robot robot : robots) robot.resetTimer();
     }
 
     @Override

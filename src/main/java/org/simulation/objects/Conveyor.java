@@ -17,23 +17,40 @@ public class Conveyor extends SceneObject{
     public Table getLastTable() {
         return tables[tables.length - 1];
     }
-    public Conveyor(Vector3f position, Vector3f rotation, Vector3f scale,int carCount,Table nextTable)
+    public Conveyor(Vector3f position, Vector3f rotation, Vector3f scale,int carCount,boolean isReverse,Table nextTable)
     {
-        this(position,rotation,scale,carCount);
-        tables[tables.length-1].setNextTable(nextTable);
+        this(position,rotation,scale,carCount,isReverse);
+         if(isReverse)tables[0].setNextTable(nextTable);
+         else tables[tables.length-1].setNextTable(nextTable);
     }
-    public Conveyor(Vector3f position, Vector3f rotation, Vector3f scale,int carCount) {
+    public Conveyor(Vector3f position, Vector3f rotation, Vector3f scale,int carCount,boolean isReverse) {
         super(position, rotation, scale);
         tables = new Table[carCount];
-        Vector3f tempPosstion = new Vector3f(position.getX(),position.getY(),position.getZ());
-        tables[0] = new Table(tempPosstion,rotation,scale);
-        for(int i = 1; i < carCount; i++)
+        if(isReverse)
         {
-            tempPosstion = new Vector3f(position.getX(),tempPosstion.getY()-0.15f,position.getZ());
-            tables[i] = new Table(tempPosstion,rotation,scale);
-            tables[i-1].setNextTable(tables[i]);
+            Vector3f tempPosstion = new Vector3f(position.getX(),position.getY()-0.15f*(carCount-1),position.getZ());
+            tables[tables.length-1] = new Table(tempPosstion, rotation, scale);
+            tables[tables.length-1].updateTimes(6000,10000);
+            for (int i = tables.length-2; i >= 0; i--) {
+                tempPosstion = new Vector3f(position.getX(), tempPosstion.getY() + 0.15f, position.getZ());
+                tables[i] = new Table(tempPosstion, rotation, scale);
+                tables[i + 1].setNextTable(tables[i]);
+                tables[i].updateTimes(6000,10000);
+            }
+        }
+        else {
+            Vector3f tempPosstion = new Vector3f(position.getX(),position.getY(),position.getZ());
+            tables[0] = new Table(tempPosstion, rotation, scale);
+            tables[0].updateTimes(6000,10000);
+            for (int i = 1; i < carCount; i++) {
+                tempPosstion = new Vector3f(position.getX(), tempPosstion.getY() - 0.15f, position.getZ());
+                tables[i] = new Table(tempPosstion, rotation, scale);
+                tables[i - 1].setNextTable(tables[i]);
+                tables[i].updateTimes(6000,10000);
+            }
         }
         tables[tables.length-1].setOccupied(false);
+        tables[0].setOccupied(false);
 
         metalicMesh = new Mesh(new Vertex[] {
                 new Vertex(new Vector3f(-0.05f,  0.09f, 0.0f),StatusColors.purple, new Vector2f(0.4f,0.4f)),
@@ -54,7 +71,7 @@ public class Conveyor extends SceneObject{
         },new Material("/textures/metalic.jpg"));
         metalicMesh.create();
         coloredUIObject = new SceneObjectUI(position,rotation,scale,metalicMesh);
-
+        updateStatus(StatusColor.READY);
     }
 
     @Override

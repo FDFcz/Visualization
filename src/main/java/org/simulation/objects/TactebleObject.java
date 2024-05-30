@@ -4,8 +4,8 @@ import org.engine.maths.Vector3f;
 import java.util.Random;
 
 public abstract class TactebleObject extends SceneObject{
-    protected long tactTime = 20000;
-    protected long comonDoneTime = 18000;
+    protected long tactTime = 10000;
+    protected long comonDoneTime = 8000;
     protected long actualTacTime=0;
     protected long lastSystemTime = System.currentTimeMillis();
     protected float faultPersent =0.05f;
@@ -15,6 +15,10 @@ public abstract class TactebleObject extends SceneObject{
 
     protected abstract boolean isTiming();
     protected abstract boolean isDone();
+    public void updateTimes(long comonDoneTime,long tactTime){
+        this.comonDoneTime=comonDoneTime;
+        this.tactTime=tactTime;
+    }
 
     public TactebleObject(Vector3f position, Vector3f rotation, Vector3f scale) {
         super(position, rotation, scale);
@@ -72,7 +76,7 @@ public abstract class TactebleObject extends SceneObject{
             if(actualTacTime<0)
             {
                 updateStatus(StatusColor.MAINTENANCE);
-                actualTacTime = rnd.nextInt(6000,12000);
+                actualTacTime = rnd.nextInt(8000,16000);
             }
         }
         else if(status==StatusColor.MAINTENANCE)

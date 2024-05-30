@@ -36,9 +36,7 @@ public class Robot extends TactebleObject {
         },new Material("/textures/metalic.jpg"));
         metalicMesh.create();
         coloredUIObject = new SceneObjectUI(position,rotation,scale,metalicMesh);
-        updateStatus(StatusColor.WORKING);
-        comonDoneTime+=3000;
-        tactTime+=3000;
+        updateStatus(StatusColor.READY);
     }
     @Override
     public void upadate() {

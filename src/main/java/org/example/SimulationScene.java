@@ -22,7 +22,6 @@ public class SimulationScene {
         sceneObjects.add(new Table(new Vector3f(0.4f, -0.4f, 0), new Vector3f(0, 0f, 0), new Vector3f(1, 1, 1),tempNextTable));
         tempNextTable = (Table) sceneObjects.get(sceneObjects.size()-1);
         sceneObjects.add(new Conveyor(new Vector3f(0.2f, -0.4f, 0), new Vector3f(0, 0f, 0), new Vector3f(1, 1, 1),2,true,tempNextTable));
-        System.out.println(sceneObjects.size());
         tempNextTable = ((Conveyor) sceneObjects.get(sceneObjects.size() - 1)).getLastTable();
         sceneObjects.add(new Workplace(new Vector3f(0f, -0.55f, 0), new Vector3f(0, 0f, 0), new Vector3f(1, 1, 1),tempNextTable));
         tempNextTable = ((Workplace) sceneObjects.get(sceneObjects.size()-1)).getTable();
@@ -91,20 +90,11 @@ public class SimulationScene {
         //---------------
         tempNextTable =((Conveyor) sceneObjects.get(23)).getFirstTable();
         sceneObjects.add(new Workplace(new Vector3f(0.2f, 0.5f, 0), new Vector3f(0, 0f, 0), new Vector3f(1, 1, 1),tempNextTable));
-
-
-
-
-
-
-
-
-
-
-
-
-        //sceneObjects.add(new Workplace(new Vector3f(0f, 0.5f, 0), new Vector3f(0, 0f, 0), new Vector3f(1, 1, 1)));
-        //sceneObjects.add(new Workplace(new Vector3f(0.2f, 0.5f, 0), new Vector3f(0, 0f, 0), new Vector3f(1, 1, 1)));
+        tempNextTable = ((Workplace) sceneObjects.get(sceneObjects.size()-1)).getTable();
+        //tempNextTable.updateTimes(26000,32000);
+        sceneObjects.add(new Workplace(new Vector3f(0f, 0.5f, 0), new Vector3f(0, 0f, 0), new Vector3f(1, 1, 1),tempNextTable));
+        tempNextTable = ((Workplace) sceneObjects.get(sceneObjects.size()-1)).getTable();
+        ((Conveyor) sceneObjects.get(26)).getFirstTable().setNextTable(tempNextTable);
     }
 
 
@@ -112,7 +102,6 @@ public class SimulationScene {
     public void renderObject()
     {
         for(SceneObject sceneObject : sceneObjects) sceneObject.upadate();
-        //if(firstTable)
     }
     public void destroy()
     {
